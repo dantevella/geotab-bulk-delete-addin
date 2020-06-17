@@ -1,10 +1,8 @@
-
-
 {
   "name": "geotab-bulk-delete-plug-in",
   "supportEmail": "dante.vella@gmail.com",
   "version": "0.1.0",
-   "url": "https://geotab-bulk-delete-addin.dantevella.vercel.app",
+  "url": "https://geotab-bulk-delete-addin.dantevella.vercel.app",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -12,7 +10,8 @@
     "@testing-library/user-event": "^7.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "yarn": "^1.22.4"
   },
   "scripts": {
     "start": "react-scripts start",
