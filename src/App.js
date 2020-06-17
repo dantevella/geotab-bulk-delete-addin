@@ -3,11 +3,11 @@ import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 
-function App() {
+function App() {  
   componentDidMount(){
     axios.get('https://dog.ceo/api/breeds/image/random')
     .then(response=>{
-      console.log(response.data);
+      this.setState({ imageURL: response.data.message });
     })
     .catch(error=>{
       console.log(error);
