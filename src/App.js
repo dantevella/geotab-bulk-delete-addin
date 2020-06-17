@@ -2,26 +2,17 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
-import { render } from '@testing-library/react';
 
 function App() {  
-  constructor(props){
-    super(props);
-    this.state ={
-      imageURL: '',
-    }
-  }
-  componentDidMount(){
+  componentDidMount() {
     axios.get('https://dog.ceo/api/breeds/image/random')
-    .then(response=>{
-      this.setState({ imageURL: response.data.message });
+    .then(response => {
+      console.log(response.data);
     })
-    .catch(error=>{
+    .catch(error => {
       console.log(error);
     });
   }
-  render(){
-    const { imageURL } = this.state;
   return (
     <div className="App">
       <header className="App-header">
@@ -41,7 +32,7 @@ function App() {
       </header>
     </div>
   );
-  }
+  
 }
 
 export default App;
