@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 
+
 function App() {  
   componentDidMount() {
     axios.get('https://dog.ceo/api/breeds/image/random')
@@ -16,7 +17,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={imageURL} />
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -32,7 +32,6 @@ function App() {
       </header>
     </div>
   );
-  
 }
 
 export default App;
