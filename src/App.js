@@ -43,11 +43,11 @@ function App() {
           </blockquote>
         }
         </main>
-      {/* <pre>
+      {<pre>
         <code>
           {responseData && JSON.stringify(responseData, null, 4)}
         </code>
-      </pre> */}
+      </pre> }
     </div>
   );
 }
