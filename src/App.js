@@ -1,55 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import List from './components/List';
+import withListLoading from './components/withListLoading';
 import axios from 'axios';
 
-function App() {  
-  let [responseData, setResponseData] = React.useState('');
-  
-  const fetchData = React.useCallback(() => {
-    axios({
-      "method": "GET",
-      "url": "https://quotes15.p.rapidapi.com/quotes/random/",
-      "headers": {
-        "content-type": "application/octet-stream",
-        "x-rapidapi-host": "quotes15.p.rapidapi.com",
-        "x-rapidapi-key": process.env.REACT_APP_API_KEY
-      }, "params": {
-        "language_code": "en"
-      }
-    })
-    .then((response) => {
-      setResponseData(response.data)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  }, [])
-  React.useEffect(() => {
-    fetchData()
-  }, [fetchData])
+function App() {
+  const ListLoading = withListLoading(List);
+  const [appState, setAppState] = useState({
+    loading: false,
+    repos: null,
+  });
+
+  useEffect(() => {
+    setAppState({ loading: true });
+    const apiUrl = 'https://api.github.com/users/hacktivist123/repos';
+    axios.get(apiUrl).then((repos) => {
+      const allRepos = repos.data;
+      setAppState({ loading: false, repos: allRepos });
+    });
+  }, [setAppState]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>
-          Fetching Data with React Hooks
-        </h1>
-        <button type='button' onClick={fetchData}>Click for Data</button>
-      </header>
-      <main>
-        {responseData &&
-          <blockquote>
-            "{responseData && responseData.content}"
-            <small>{responseData && responseData.originator && responseData.originator.name}</small>
-          </blockquote>
-        }
-        </main>
-      {<pre>
-        <code>
-          {responseData && JSON.stringify(responseData, null, 4)}
-        </code>
-      </pre> }
+    <div className='App'>
+      <div className='container'>
+        <h1>My Repositories</h1>
+      </div>
+      <div className='repo-container'>
+        <ListLoading isLoading={appState.loading} repos={appState.repos} />
+      </div>
+      <footer>
+        <div className='footer'>
+          Built{' '}
+          <span role='img' aria-label='love'>
+          </span>{' '}
+          with by Dante Vella
+        </div>
+      </footer>
     </div>
   );
 }
-
 export default App;
