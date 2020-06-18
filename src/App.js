@@ -23,7 +23,7 @@ function App() {
   return (
     <div className='App'>
       <div className='container'>
-        <h1>My Repositories</h1>
+        <h1>My Data</h1>
       </div>
       <div className='repo-container'>
         <ListLoading isLoading={appState.loading} repos={appState.repos} />
@@ -33,7 +33,7 @@ function App() {
           Built{' '}
           <span role='img' aria-label='love'>
           </span>{' '}
-          with by Dante Vella
+          by Dante Vella
         </div>
       </footer>
     </div>
