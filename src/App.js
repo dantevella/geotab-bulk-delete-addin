@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     setAppState({ loading: true });
-    const apiUrl = 'https://api.github.com/users/hacktivist123/repos';
+    const apiUrl = 'https://my1138.geotab.com/apiv1/Get?typeName=Group&credentials=%7b%22database%22:%22velladev1%22,%22userName%22:%22dante.vella@gmail.com%22,%22password%22:%22Techlab123!!%22%7d';
     axios.get(apiUrl).then((repos) => {
       const allRepos = repos.data;
       setAppState({ loading: false, repos: allRepos });
