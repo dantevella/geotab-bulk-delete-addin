@@ -11,15 +11,15 @@ function App() {
     repos: null,
   });
 
-  useEffect(() => {
-    setAppState({ loading: true });
-    const apiUrl = 'https://my1138.geotab.com/apiv1';
-    axios.get(apiUrl).then((results) => {
-      console.log(results);
-      //const allRepos = repos.data;
-      //setAppState({ loading: false, repos: allRepos });
-    });
-  }, [setAppState]);
+  // useEffect(() => {
+  //   setAppState({ loading: true });
+  //   const apiUrl = 'https://my1138.geotab.com/apiv1';
+  //   axios.get(apiUrl).then((results) => {
+  //     console.log(results);
+  //     //const allRepos = repos.data;
+  //     //setAppState({ loading: false, repos: allRepos });
+  //   });
+  // }, [setAppState]);
 
   return (
     <div className='App'>
