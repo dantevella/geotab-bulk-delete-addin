@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <script>
+    var api;
+    var state;
     geotab.addin.root = () => {
       return {
-        initialize() {
+        initialize(freshAPI, freshState, callback) {
+          api = freshAPI;
+          state = freshState;
+          if (callback) {
+            callback();
+          }
           console.log("hey I was called");
         },
       };
