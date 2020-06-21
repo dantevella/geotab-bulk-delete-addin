@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <script>
-    var api;
-    var state;
-    geotab.addin.root = () => {
-      return {
-        initialize(freshAPI, freshState, callback) {
-          api = freshAPI;
-          state = freshState;
-          if (callback) {
-            callback();
-          }
-          console.log("hey I was called");
-        },
+    if (geotab) {
+      geotab.addin.root = () => {
+        return {
+          initialize(freshAPI, freshState, callback) {
+            window.api = freshAPI;
+            window.state = freshState;
+            if (callback) {
+              callback();
+            }
+            console.log("hey I was called");
+          },
+        };
       };
-    };
+    }
   </script>
   <head>
     <meta charset="utf-8" />

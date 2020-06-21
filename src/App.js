@@ -4,7 +4,7 @@ import List from './components/List';
 import withListLoading from './components/withListLoading';
 import axios from 'axios';
 
-console.log(global.api);
+console.log(window.api);
 
 function App() {
   const ListLoading = withListLoading(List);
