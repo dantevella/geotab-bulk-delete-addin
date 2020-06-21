@@ -4,17 +4,19 @@ import List from './components/List';
 import withListLoading from './components/withListLoading';
 import axios from 'axios';
 
-console.log(window.api);
-
 function App() {
   const ListLoading = withListLoading(List);
+
+  const [api, setApi] = useState();
   const [appState, setAppState] = useState({
     loading: false,
     repos: null,
   });
 
   useEffect(() =>{
-    console.log(window.api);
+    if(window.api){
+      setApi(window.api);
+    }
   }, [window.api])
   // useEffect(() => {
   //   setAppState({ loading: true });
@@ -25,7 +27,7 @@ function App() {
   //     //setAppState({ loading: false, repos: allRepos });
   //   });
   // }, [setAppState]);
-
+if(!api) return null;
   return (
     <div className='App'>
       <div className='container'>
