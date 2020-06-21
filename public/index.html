@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script src="https://cdn.jsdelivr.net/npm/mg-api-js"></script>
   <script>
     if (window.geotab) {
       window.geotab.addin.root = () => {
@@ -13,6 +14,14 @@
           },
         };
       };
+    } else {
+      window.api = new GeotabApi({
+        credentials: {
+          database: '%REACT_APP_DATABASE%',
+          userName: '%REACT_APP_USERNAME%',
+          password: '%REACT_APP_PASSWORD%',
+        },
+      });
     }
   </script>
   <head>

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import List from './components/List';
-import withListLoading from './components/withListLoading';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import List from "./components/List";
+import withListLoading from "./components/withListLoading";
 
 function App() {
   const ListLoading = withListLoading(List);
@@ -13,35 +12,39 @@ function App() {
     repos: null,
   });
 
-  useEffect(() =>{
-    if(window.api){
+  useEffect(() => {
+    console.log(window.api);
+    if (window.api) {
       setApi(window.api);
     }
-  }, [window.api])
-  // useEffect(() => {
-  //   setAppState({ loading: true });
-  //   const apiUrl = 'https://my1138.geotab.com/apiv1';
-  //   axios.get(apiUrl).then((results) => {
-  //     console.log(results);
-  //     //const allRepos = repos.data;
-  //     //setAppState({ loading: false, repos: allRepos });
-  //   });
-  // }, [setAppState]);
-if(!api) return null;
+  }, [window.api]);
+  useEffect(() => {
+    if (api) {
+      setAppState({ loading: true });
+      api
+        .call("Get", { typeName: "Group", resultsLimit: 100 })
+        .then((result) => {
+          // Result is the information returned by the server. In this case, it's the 100 devices.
+          console.log(result);
+        })
+        .catch((error) => {
+          // some form of error occured with the request
+          console.log(error);
+        });
+    }
+  }, [api]);
+  if (!api) return null;
   return (
-    <div className='App'>
-      <div className='container'>
+    <div className="App">
+      <div className="container">
         <h1>My Data</h1>
       </div>
-      <div className='repo-container'>
+      <div className="repo-container">
         <ListLoading isLoading={appState.loading} repos={appState.repos} />
       </div>
       <footer>
-        <div className='footer'>
-          Built{' '}
-          <span role='img' aria-label='love'>
-          </span>{' '}
-          by Dante Vella
+        <div className="footer">
+          Built <span role="img" aria-label="love"></span> by Dante Vella
         </div>
       </footer>
     </div>
