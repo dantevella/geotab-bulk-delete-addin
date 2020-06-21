@@ -13,6 +13,9 @@ function App() {
     repos: null,
   });
 
+  useEffect(() =>{
+    console.log(window.api);
+  }, [window.api])
   // useEffect(() => {
   //   setAppState({ loading: true });
   //   const apiUrl = 'https://my1138.geotab.com/apiv1';
