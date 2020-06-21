@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-global.geotab.addin.index.initialize = () => console.log('hey I was called');
+geotab.addin.index.initialize = () => console.log('hey I was called');
 
 ReactDOM.render(
   <React.StrictMode>
