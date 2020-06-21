@@ -13,10 +13,11 @@ function App() {
 
   useEffect(() => {
     setAppState({ loading: true });
-    const apiUrl = 'https://api.github.com/users/hacktivist123/repos';
-    axios.get(apiUrl).then((repos) => {
-      const allRepos = repos.data;
-      setAppState({ loading: false, repos: allRepos });
+    const apiUrl = 'https://my1138.geotab.com/apiv1';
+    axios.get(apiUrl).then((results) => {
+      console.log(results);
+      //const allRepos = repos.data;
+      //setAppState({ loading: false, repos: allRepos });
     });
   }, [setAppState]);
 
