@@ -2,11 +2,22 @@
 // typeof {}
 function initializeDictionary(groups) {
   const groupsDict = {};
-  groups.forEach(function (group) {
-    const parentId = group.id;
-    group.children.forEach(function (child) {
-      groupsDict[child.id] = parentId;
-    });
+  groups.forEach(function (parentGroup) {
+    const parentId = parentGroup.id;
+
+    function addChildrenToGroup(id, group) {
+      group.children.forEach(function (child) {
+        groupsDict[child.id] = id;
+        if (child.children) {
+          child.children.forEach((gChild) => {
+            groupsDict[gChild.id] = id;
+            addChildrenToGroup(id, gChild);
+          });
+        }
+      });
+    }
+
+    addChildrenToGroup(parentId, parentGroup);
   });
 
   console.log("Groups Dictionary:", groupsDict);
@@ -16,21 +27,33 @@ function initializeDictionary(groups) {
 function composeMulticall(groupsToRemove, groups) {
   const multicallArray = [];
   const groupsDict = initializeDictionary(groups);
-  groupsToRemove.forEach(function (groupid) {
-    let parentId = groupsDict[groupid];
-    multicallArray.push([
-      "Remove",
-      {
-        typeName: "Group",
-        entity: {
-          id: groupid,
-          parent: {
-            id: parentId,
+  console.log(groupsToRemove);
+  console.log(groups)
+  groupsToRemove.forEach(groupToRemove => {
+    function deleteGroup(groupId) {
+      console.log({groupId})
+      const parentId = groupsDict[groupId];
+      Object.keys(groupsDict).forEach(id => {
+        const value = groupsDict[id];
+        if (value === groupId) {
+          deleteGroup(id)
+        }
+      });
+        multicallArray.push([
+          "Remove",
+          {
+            typeName: "Group",
+            entity: {
+              id: groupId,
+              parent: {
+                id: parentId,
+              },
+            },
           },
-        },
-      },
-    ]);
-  });
+        ]);
+    }
+    deleteGroup(groupToRemove)
+  })
 
   console.log("List of multicalls", multicallArray);
   return multicallArray;
