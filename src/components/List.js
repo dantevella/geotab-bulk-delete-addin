@@ -1,16 +1,20 @@
-import React from 'react';
+import React from "react";
+import handleDelete from "../utils/removeMulticalls";
+
 const List = (props) => {
-  const { repos } = props;
-  if (!repos || repos.length === 0) return <p>No repos, sorry</p>;
+  //handleDelete(api, [id to delete], groups)
+  const { groups, api } = props;
+  if (!groups || groups.length === 0) return <p>No groups, sorry</p>;
   return (
     <ul>
-      <h2 className='list-head'>Available Public Repositories</h2>
-      {repos.map((repo) => {
+      <h2 className="list-head">Available Groups to Delete</h2>
+      {groups.map((groups) => {
         return (
-          <li key={repo.id} className='list'>
-            <span className='repo-text'>{repo.name} </span>
-            <span className='repo-description'>{repo.description}</span>
-          </li>
+          <button type="button" key={groups.id} className="delete-buttons">
+            Delete
+            <span className="repo-text">{" " + groups.name} </span>
+            <span className="repo-description">{groups.description}</span>
+          </button>
         );
       })}
     </ul>

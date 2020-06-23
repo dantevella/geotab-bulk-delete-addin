@@ -9,7 +9,7 @@ function App() {
   const [api, setApi] = useState();
   const [appState, setAppState] = useState({
     loading: false,
-    repos: null,
+    groups: null,
   });
 
   useEffect(() => {
@@ -18,14 +18,15 @@ function App() {
       setApi(window.api);
     }
   }, [window.api]);
+
   useEffect(() => {
     if (api) {
-      setAppState({ loading: true });
+      setAppState({ loading: true, groups: null });
       api
         .call("Get", { typeName: "Group", resultsLimit: 100 })
         .then((result) => {
           // Result is the information returned by the server. In this case, it's the 100 devices.
-          console.log(result);
+          setAppState({ loading: false, groups: result });
         })
         .catch((error) => {
           // some form of error occured with the request
@@ -33,6 +34,7 @@ function App() {
         });
     }
   }, [api]);
+
   if (!api) return null;
   return (
     <div className="App">
@@ -40,7 +42,11 @@ function App() {
         <h1>My Data</h1>
       </div>
       <div className="repo-container">
-        <ListLoading isLoading={appState.loading} repos={appState.repos} />
+        <ListLoading
+          isLoading={appState.loading}
+          groups={appState.groups}
+          api={api}
+        />
       </div>
       <footer>
         <div className="footer">
