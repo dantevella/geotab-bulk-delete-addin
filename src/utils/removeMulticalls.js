@@ -26,55 +26,45 @@ function initializeDictionary(groups) {
 
 function composeMulticall(groupsToRemove, groups) {
   const multicallArray = [];
+  const deleteArray = [];
   const groupsDict = initializeDictionary(groups);
   console.log(groupsToRemove);
-  console.log(groups)
-  groupsToRemove.forEach(groupToRemove => {
+  console.log(groups);
+  groupsToRemove.forEach((groupToRemove) => {
     function deleteGroup(groupId) {
-      console.log({groupId})
+      console.log({ groupId });
       const parentId = groupsDict[groupId];
-      Object.keys(groupsDict).forEach(id => {
+      Object.keys(groupsDict).forEach((id) => {
         const value = groupsDict[id];
         if (value === groupId) {
-          deleteGroup(id)
+          deleteGroup(id);
         }
       });
-        multicallArray.push([
-          "Remove",
-          {
-            typeName: "Group",
-            entity: {
-              id: groupId,
-              parent: {
-                id: parentId,
-              },
+      multicallArray.push([
+        "Remove",
+        {
+          typeName: "Group",
+          entity: {
+            id: groupId,
+            parent: {
+              id: parentId,
             },
           },
-        ]);
+        },
+      ]);
+      deleteArray.push(groupId);
     }
-    deleteGroup(groupToRemove)
-  })
+    deleteGroup(groupToRemove);
+  });
 
   console.log("List of multicalls", multicallArray);
-  return multicallArray;
+  return [multicallArray, deleteArray];
 }
 
-function performRemove(api, multicalls) {
-  api.multiCall(
-    multicalls,
-    function (results) {
-      if (results) {
-        results.forEach(function (result) {
-          if (result !== null) {
-            console.log(result);
-          }
-        });
-      }
-    },
-    function (e) {
-      console.log(e);
-    }
-  );
+async function performRemove(api, [multicalls, deleteArray]) {
+  console.log(multicalls, deleteArray)
+  await api.multiCall(multicalls);
+  return deleteArray;
 }
 
 /**
@@ -85,7 +75,7 @@ function performRemove(api, multicalls) {
  * @param {array} groups
  */
 function handleRemove(api, groupsToRemove, groups) {
-  performRemove(api, composeMulticall(groupsToRemove, groups));
+  return performRemove(api, composeMulticall(groupsToRemove, groups));
 }
 
 export default handleRemove;

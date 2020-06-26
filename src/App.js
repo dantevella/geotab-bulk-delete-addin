@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import List from "./components/List";
-import withListLoading from "./components/withListLoading";
 
 function App() {
-  const ListLoading = withListLoading(List);
-
   const [api, setApi] = useState();
   const [appState, setAppState] = useState({
     loading: false,
@@ -42,10 +39,11 @@ function App() {
         <h1>My Data</h1>
       </div>
       <div className="repo-container">
-        <ListLoading
+        <List
           isLoading={appState.loading}
           groups={appState.groups}
           api={api}
+          setAppState={setAppState}
         />
       </div>
       <footer>
