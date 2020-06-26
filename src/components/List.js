@@ -1,42 +1,85 @@
 import React from "react";
 import handleDelete from "../utils/removeMulticalls";
 
+function recursiveGetChildren(
+  groups,
+  child,
+  elements,
+  level,
+  setAppState,
+  api
+) {
+  level++;
+  const { id } = child;
+  const currentChild = groups.find((group) => group.id === id);
+  console.log(currentChild);
+  if (currentChild){
+
+    elements.push(
+      <React.Fragment key ={currentChild.id}>
+      <div
+        style={{ paddingLeft: 10 * level, color: "white", fontSize: 22 }}
+        >
+        {currentChild.name}
+      </div>
+      <button
+        type="button"
+        onClick={async () => {
+          const deletedGroups = await handleDelete(
+            api,
+            [currentChild.id],
+            groups
+            );
+            console.log({ deletedGroups });
+            setAppState({
+              loading: false,
+              groups: groups.filter(
+                (group) => deletedGroups.indexOf(group.id) === -1
+                ),
+              });
+            }}
+            className="delete-buttons"
+            >
+        Delete
+      </button>
+    </React.Fragment>
+  );
+  currentChild.children.map((nextChild) => {
+    return recursiveGetChildren(
+      groups,
+      nextChild,
+      elements,
+      level,
+      setAppState,
+      api
+      );
+    });
+  }
+}
+
 const List = (props) => {
   const { groups, api, isLoading, setAppState } = props;
 
   if (isLoading) {
     return (
-      <p style={{ textAlign: 'center', fontSize: '30px' }}>
-      Hold on, fetching data may take some time :)
-    </p>
-  );
-}
+      <p style={{ textAlign: "center", fontSize: "30px" }}>
+        Hold on, fetching data may take some time :)
+      </p>
+    );
+  }
 
   if (!groups || groups.length === 0) return <p>No groups, sorry</p>;
+  const topLevelGroup = groups.find((group) => group.id === "GroupCompanyId");
   return (
-    <ul>
+    <div>
       <h2 className="list-head">Available Groups to Delete</h2>
-      {groups.map((group) => {
-        return (
-          <button
-            type="button"
-            key={group.id}
-            onClick={async () => {
-              const deletedGroups = await handleDelete(api, [group.id], groups)
-              console.log({deletedGroups})
-              setAppState({
-                loading: false,
-                groups: groups.filter(group=> deletedGroups.indexOf(group.id)===-1),          
-              });
-            }}
-            className="delete-buttons"
-          >
-            Delete
-            <span className="repo-text">{" " + group.name} </span>
-          </button>
-        );
+      {topLevelGroup.children.map((child) => {
+        const elements = [];
+        const level = 0;
+        recursiveGetChildren(groups, child, elements, level, setAppState, api);
+        return elements;
       })}
-    </ul>
+    </div>
   );
 };
 export default List;
