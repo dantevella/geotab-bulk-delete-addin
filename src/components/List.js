@@ -1,5 +1,6 @@
 import React from "react";
 import handleDelete from "../utils/removeMulticalls";
+import breakUsers from "../utils/disassociateUsers";
 
 function recursiveGetChildren(
   groups,
@@ -14,7 +15,6 @@ function recursiveGetChildren(
   const currentChild = groups.find((group) => group.id === id);
   console.log(currentChild);
   if (currentChild){
-
     elements.push(
       <React.Fragment key ={currentChild.id}>
       <div
@@ -25,6 +25,9 @@ function recursiveGetChildren(
       <button
         type="button"
         onClick={async () => {
+
+          await breakUsers(api, [currentChild.id]);   
+          // users broken        
           const deletedGroups = await handleDelete(
             api,
             [currentChild.id],

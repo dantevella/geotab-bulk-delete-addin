@@ -23,7 +23,6 @@ function initializeDictionary(groups) {
   console.log("Groups Dictionary:", groupsDict);
   return groupsDict;
 }
-
 function composeMulticall(groupsToRemove, groups) {
   const multicallArray = [];
   const deleteArray = [];
@@ -62,7 +61,7 @@ function composeMulticall(groupsToRemove, groups) {
 }
 
 async function performRemove(api, [multicalls, deleteArray]) {
-  console.log(multicalls, deleteArray)
+  console.log(multicalls, deleteArray);
   await api.multiCall(multicalls);
   return deleteArray;
 }
