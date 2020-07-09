@@ -1,5 +1,3 @@
-import List from "../components/List";
-
 // Sample API invocation retrieves all "Device" objects
 async function disassociateUsers(api, groupId) {
   try {

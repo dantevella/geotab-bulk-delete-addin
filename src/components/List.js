@@ -1,14 +1,16 @@
 import React from "react";
-import handleDelete from "../utils/removeMulticalls";
-import breakUsers from "../utils/disassociateUsers";
+import { useApi } from "./ApiProvider";
+import { useGroups} from "./GroupsProvider"
+import { useIsLoading } from "./IsLoadingProvider";
+import {useSetAppState} from "./SetAppStateProvider"
+import { useDeletedGroups } from "./DeletedGroupsProvider";
 
 function recursiveGetChildren(
   groups,
   child,
   elements,
   level,
-  setAppState,
-  api
+  setGroupToDelete,
 ) {
   level++;
   const { id } = child;
@@ -24,22 +26,9 @@ function recursiveGetChildren(
       </div>
       <button
         type="button"
-        onClick={async () => {
+        onClick={() => {
+          setGroupToDelete(currentChild.id)
 
-          await breakUsers(api, [currentChild.id]);   
-          // users broken        
-          const deletedGroups = await handleDelete(
-            api,
-            [currentChild.id],
-            groups
-            );
-            console.log({ deletedGroups });
-            setAppState({
-              loading: false,
-              groups: groups.filter(
-                (group) => deletedGroups.indexOf(group.id) === -1
-                ),
-              });
             }}
             className="delete-buttons"
             >
@@ -53,15 +42,18 @@ function recursiveGetChildren(
       nextChild,
       elements,
       level,
-      setAppState,
-      api
+      setGroupToDelete,
       );
     });
   }
 }
 
 const List = (props) => {
-  const { groups, api, isLoading, setAppState } = props;
+  const api = useApi()
+  const groups = useGroups()
+  const isLoading = useIsLoading()
+  const setAppState = useSetAppState()
+  const [groupToDelete, setGroupToDelete] = useDeletedGroups()
 
   if (isLoading) {
     return (
@@ -79,7 +71,7 @@ const List = (props) => {
       {topLevelGroup.children.map((child) => {
         const elements = [];
         const level = 0;
-        recursiveGetChildren(groups, child, elements, level, setAppState, api);
+        recursiveGetChildren(groups, child, elements, level, setGroupToDelete);
         return elements;
       })}
     </div>

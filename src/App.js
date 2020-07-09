@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import List from "./components/List";
+import { ApiProvider } from "./components/ApiProvider";
+import { GroupsProvider } from "./components/GroupsProvider";
+import { IsLoadingProvider } from "./components/IsLoadingProvider";
+import { SetAppStateProvider } from "./components/SetAppStateProvider"
+import DeletionList from "./components/DeletionList";
+import { useDeletedGroups, DeletedGroupsProvider } from "./components/DeletedGroupsProvider";
 
 function App() {
   const [api, setApi] = useState();
@@ -8,13 +14,14 @@ function App() {
     loading: false,
     groups: null,
   });
+  const [deleteGroupId, setDeleteGroupId] = useState();
 
   useEffect(() => {
     console.log(window.api);
     if (window.api) {
       setApi(window.api);
     }
-  }, [window.api]);
+  }, []);
 
   useEffect(() => {
     if (api) {
@@ -32,26 +39,37 @@ function App() {
     }
   }, [api]);
 
+
+
   if (!api) return null;
   return (
-    <div className="App">
-      <div className="container">
-        <h1>My Data</h1>
-      </div>
-      <div className="repo-container">
-        <List
-          isLoading={appState.loading}
-          groups={appState.groups}
-          api={api}
-          setAppState={setAppState}
-        />
-      </div>
-      <footer>
-        <div className="footer">
-          Built <span role="img" aria-label="love"></span> by Dante Vella
-        </div>
-      </footer>
-    </div>
+    <ApiProvider api={api} setApi={setApi}>
+      <GroupsProvider groups={appState.groups}>
+        <IsLoadingProvider isLoading={appState.loading}>
+          <SetAppStateProvider setAppState={setAppState}>
+            <DeletedGroupsProvider deletedGroups={deleteGroupId} setDeletedGroups={setDeleteGroupId}>
+            <div className="App">
+              <div className="container">
+                <h1>My Data</h1>
+              </div>
+
+              <div className="repo-container">
+                {deleteGroupId
+                ? <DeletionList/>
+                : <List />}
+              </div>
+              <footer>
+                <div className="footer">
+                  Built <span role="img" aria-label="love"></span> by Dante
+                  Vella
+                </div>
+              </footer>
+            </div>
+            </DeletedGroupsProvider>
+          </SetAppStateProvider>
+        </IsLoadingProvider>
+      </GroupsProvider>
+    </ApiProvider>
   );
 }
 export default App;
