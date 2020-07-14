@@ -8,9 +8,6 @@ async function disassociateUsers(api, groupId) {
       return user.companyGroups.find(({ id }) => id === groupId[0]);
     });
     console.log(userArray);
-    // for each user
-    // await their update
-    // look at promise.all
     await Promise.all(
       userArray.map(async (user) => {
         user.companyGroups = user.companyGroups.filter((companyGroup) => {
@@ -30,3 +27,5 @@ async function disassociateUsers(api, groupId) {
   }
 }
 export default disassociateUsers;
+//change function by creating a new file, copy and paste and call different name in order
+//to set user to a new group
