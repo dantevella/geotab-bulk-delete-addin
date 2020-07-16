@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useApi } from "./ApiProvider";
 import { useGroups, GroupsProvider } from "./GroupsProvider";
 import { useDeletedGroups } from "./DeletedGroupsProvider";
-import disassociatingUser from "../utils/disassociatingUser"
-import disassociateUsers from "../utils/disassociateUsers";
+import disassociatingUser from "../utils/disassociatingUser";
+import List from "../components/List";
+import removeMulticalls from "../utils/removeMulticalls";
 
 const DeletionList = (props) => {
   const [users, setUser] = useState([]);
   const api = useApi();
   const groups = useGroups();
   const [groupToDelete, setGroupToDelete] = useDeletedGroups();
-  
+
   useEffect(() => {
     console.log(groupToDelete);
     async function disassociateUsers() {
@@ -29,6 +30,35 @@ const DeletionList = (props) => {
     disassociateUsers();
   }, [groupToDelete]);
 
+  function updatePrompt() {
+    {
+      console.log(users);
+    }
+    if (users.length === 0) {
+      return (
+        <React.Fragment>
+          <button
+            type="button"
+            onClick={async () => {
+              await removeMulticalls(api, [groupToDelete], groups);
+              setGroupToDelete(undefined);
+            }}
+            className="delete-buttons"
+          >
+            Delete
+          </button>
+          <button
+            type="button"
+            onClick={() => setGroupToDelete(undefined)}
+            className="delete-buttons"
+          >
+            Cancel
+          </button>
+        </React.Fragment>
+      );
+    }
+  }
+
   // grab group id from context
   //get users for groups
   // set the users into state
@@ -40,9 +70,10 @@ const DeletionList = (props) => {
         This group has user dependencies, please select either an existing group
         or the group named "Null Group" to move the user association into.
       </h3>
+      {updatePrompt()}
       {users.map((user) => {
         return (
-          <div key= {user.id}>
+          <div key={user.id}>
             <div style={{ paddingLeft: 10, color: "#008", fontSize: 18 }}>
               <div>
                 User: <strong>{user.name}</strong> was in{" "}
@@ -59,31 +90,36 @@ const DeletionList = (props) => {
               name="groups"
               id="groups"
               key={user.id}
-              onChange={async(e)=>{
-                const newGroup=e.target.value
-                if(newGroup){
-                  //call a function to change user group
-                  const dissassociate = await disassociatingUser(api, newGroup, user)
-                  //value returned from disassociatingUser
-                  //set new value into state
-                  console.log(dissassociate)
-                  setUser((u)=>{
-                      return u.filter(nuser=> {
-                        if(nuser.id===dissassociate){
-                          return false
-                        }
-                        return true;
-                      })
-                  })
-                  // setUser([dissassociate])
+              onChange={async (e) => {
+                const newGroup = e.target.value;
+                if (newGroup) {
+                  const dissassociate = await disassociatingUser(
+                    api,
+                    newGroup,
+                    user
+                  );
+                  console.log(dissassociate);
+                  setUser((u) => {
+                    return u.filter((nuser) => {
+                      if (nuser.id === dissassociate) {
+                        return false;
+                      }
+                      return true;
+                    });
+                  });
                 }
-                console.log("This is new array: " )
+                console.log("This is new array: ");
               }}
             >
               {groups.map((group) => {
-                return <option key ={group.id} value={group.id} label={group.name} ></option>;
+                return (
+                  <option
+                    key={group.id}
+                    value={group.id}
+                    label={group.name}
+                  ></option>
+                );
               })}
-              
             </select>
           </div>
         );
@@ -91,4 +127,6 @@ const DeletionList = (props) => {
     </div>
   );
 };
+// update group list after delete
+// back/cancel from deletion
 export default DeletionList;

@@ -74,6 +74,7 @@ async function performRemove(api, [multicalls, deleteArray]) {
  * @param {array} groups
  */
 function handleRemove(api, groupsToRemove, groups) {
+  console.log(groupsToRemove, groups)
   return performRemove(api, composeMulticall(groupsToRemove, groups));
 }
 

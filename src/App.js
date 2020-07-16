@@ -4,9 +4,12 @@ import List from "./components/List";
 import { ApiProvider } from "./components/ApiProvider";
 import { GroupsProvider } from "./components/GroupsProvider";
 import { IsLoadingProvider } from "./components/IsLoadingProvider";
-import { SetAppStateProvider } from "./components/SetAppStateProvider"
+import { SetAppStateProvider } from "./components/SetAppStateProvider";
 import DeletionList from "./components/DeletionList";
-import { useDeletedGroups, DeletedGroupsProvider } from "./components/DeletedGroupsProvider";
+import {
+  useDeletedGroups,
+  DeletedGroupsProvider,
+} from "./components/DeletedGroupsProvider";
 
 function App() {
   const [api, setApi] = useState();
@@ -15,7 +18,7 @@ function App() {
     groups: null,
   });
   const [deleteGroupId, setDeleteGroupId] = useState();
-
+  console.log(deleteGroupId);
   useEffect(() => {
     console.log(window.api);
     if (window.api) {
@@ -24,6 +27,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("Ran this");
     if (api) {
       setAppState({ loading: true, groups: null });
       api
@@ -37,9 +41,9 @@ function App() {
           console.log(error);
         });
     }
-  }, [api]);
+  }, [api, deleteGroupId]);
 
-
+  console.log(appState.groups);
 
   if (!api) return null;
   return (
@@ -47,24 +51,25 @@ function App() {
       <GroupsProvider groups={appState.groups}>
         <IsLoadingProvider isLoading={appState.loading}>
           <SetAppStateProvider setAppState={setAppState}>
-            <DeletedGroupsProvider deletedGroups={deleteGroupId} setDeletedGroups={setDeleteGroupId}>
-            <div className="App">
-              <div className="container">
-                <h1>My Data</h1>
-              </div>
-
-              <div className="repo-container">
-                {deleteGroupId
-                ? <DeletionList/>
-                : <List />}
-              </div>
-              <footer>
-                <div className="footer">
-                  Built <span role="img" aria-label="love"></span> by Dante
-                  Vella
+            <DeletedGroupsProvider
+              deletedGroups={deleteGroupId}
+              setDeletedGroups={setDeleteGroupId}
+            >
+              <div className="App">
+                <div className="container">
+                  <h1>My Data</h1>
                 </div>
-              </footer>
-            </div>
+
+                <div className="repo-container">
+                  {deleteGroupId ? <DeletionList /> : <List />}
+                </div>
+                <footer>
+                  <div className="footer">
+                    Built <span role="img" aria-label="love"></span> by Dante
+                    Vella
+                  </div>
+                </footer>
+              </div>
             </DeletedGroupsProvider>
           </SetAppStateProvider>
         </IsLoadingProvider>

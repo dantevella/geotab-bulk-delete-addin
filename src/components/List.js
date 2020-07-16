@@ -1,8 +1,8 @@
 import React from "react";
 import { useApi } from "./ApiProvider";
-import { useGroups} from "./GroupsProvider"
+import { useGroups } from "./GroupsProvider";
 import { useIsLoading } from "./IsLoadingProvider";
-import {useSetAppState} from "./SetAppStateProvider"
+import { useSetAppState } from "./SetAppStateProvider";
 import { useDeletedGroups } from "./DeletedGroupsProvider";
 
 function recursiveGetChildren(
@@ -10,50 +10,47 @@ function recursiveGetChildren(
   child,
   elements,
   level,
-  setGroupToDelete,
+  setGroupToDelete
 ) {
   level++;
   const { id } = child;
   const currentChild = groups.find((group) => group.id === id);
   console.log(currentChild);
-  if (currentChild){
+  if (currentChild) {
     elements.push(
-      <React.Fragment key ={currentChild.id}>
-      <div
-        style={{ paddingLeft: 10 * level, color: "white", fontSize: 22 }}
+      <React.Fragment key={currentChild.id}>
+        <div style={{ paddingLeft: 10 * level, color: "white", fontSize: 22 }}>
+          {currentChild.name}
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setGroupToDelete(currentChild.id);
+          }}
+          className="delete-buttons"
         >
-        {currentChild.name}
-      </div>
-      <button
-        type="button"
-        onClick={() => {
-          setGroupToDelete(currentChild.id)
-
-            }}
-            className="delete-buttons"
-            >
-        Delete
-      </button>
-    </React.Fragment>
-  );
-  currentChild.children.map((nextChild) => {
-    return recursiveGetChildren(
-      groups,
-      nextChild,
-      elements,
-      level,
-      setGroupToDelete,
+          Delete
+        </button>
+      </React.Fragment>
+    );
+    currentChild.children.map((nextChild) => {
+      return recursiveGetChildren(
+        groups,
+        nextChild,
+        elements,
+        level,
+        setGroupToDelete
       );
     });
   }
 }
 
 const List = (props) => {
-  const api = useApi()
-  const groups = useGroups()
-  const isLoading = useIsLoading()
-  const setAppState = useSetAppState()
-  const [groupToDelete, setGroupToDelete] = useDeletedGroups()
+  const api = useApi();
+  const groups = useGroups();
+  const isLoading = useIsLoading();
+  const setAppState = useSetAppState();
+  const [groupToDelete, setGroupToDelete] = useDeletedGroups();
 
   if (isLoading) {
     return (
