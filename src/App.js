@@ -18,7 +18,6 @@ function App() {
     groups: null,
   });
   const [deleteGroupId, setDeleteGroupId] = useState();
-  console.log(deleteGroupId);
   useEffect(() => {
     console.log(window.api);
     if (window.api) {
@@ -27,7 +26,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log("Ran this");
     if (api) {
       setAppState({ loading: true, groups: null });
       api
@@ -43,7 +41,6 @@ function App() {
     }
   }, [api, deleteGroupId]);
 
-  console.log(appState.groups);
 
   if (!api) return null;
   return (

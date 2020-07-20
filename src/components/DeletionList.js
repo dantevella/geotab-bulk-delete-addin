@@ -3,7 +3,6 @@ import { useApi } from "./ApiProvider";
 import { useGroups, GroupsProvider } from "./GroupsProvider";
 import { useDeletedGroups } from "./DeletedGroupsProvider";
 import disassociatingUser from "../utils/disassociatingUser";
-import List from "../components/List";
 import removeMulticalls from "../utils/removeMulticalls";
 
 const DeletionList = (props) => {
@@ -22,6 +21,14 @@ const DeletionList = (props) => {
         userArray = userArray.filter((user) => {
           return user.companyGroups.find(({ id }) => id === groupToDelete);
         });
+        userArray.push(
+          ...userArray.filter((user) => {
+            return user.companyGroups.find(
+              ({ id }) =>
+                id === recursivelyFindChildren(groups, { id: groupToDelete }, user, userArray)
+            );
+          })
+        );
         setUser(userArray);
       } catch (err) {
         console.log(err);
@@ -30,10 +37,19 @@ const DeletionList = (props) => {
     disassociateUsers();
   }, [groupToDelete]);
 
-  function updatePrompt() {
-    {
-      console.log(users);
+  function recursivelyFindChildren(groups, child, entity, entityArray) {
+    const { id } = child;
+    const currentChild = groups.find((group) => group.id === id);
+    if (currentChild) {
+      const moveEntity = entity;
+      const moveList = entityArray
+      currentChild.children.map((nextChild) => {
+        return recursivelyFindChildren(groups, nextChild);
+      });
     }
+  }
+
+  function updatePrompt() {
     if (users.length === 0) {
       return (
         <React.Fragment>
@@ -77,7 +93,8 @@ const DeletionList = (props) => {
             <div style={{ paddingLeft: 10, color: "#008", fontSize: 18 }}>
               <div>
                 User: <strong>{user.name}</strong> was in{" "}
-                <strong>{groupDeleting.name}</strong> and will be moved to:
+                <strong>{groupDeleting && groupDeleting.name}</strong> and will
+                be moved to:
               </div>
             </div>
             <select
@@ -128,5 +145,4 @@ const DeletionList = (props) => {
   );
 };
 // update group list after delete
-// back/cancel from deletion
 export default DeletionList;
