@@ -5,30 +5,51 @@ import { useDeletedGroups } from "./DeletedGroupsProvider";
 import disassociatingUser from "../utils/disassociatingUser";
 import removeMulticalls from "../utils/removeMulticalls";
 
+export function recursivelyFindChildren(groups, child) {
+  // Returned Value
+  const groupArray = [];
+  // Group Id
+  const { id } = child;
+  // Current Group
+  const currentGroup = groups.find((group) => group.id === id);
+  if (currentGroup) {
+    groupArray.push(currentGroup.id);
+    if (currentGroup.children) {
+      const returnedChildren = currentGroup.children.map((nextGroup) =>
+        recursivelyFindChildren(groups, nextGroup)
+      );
+      returnedChildren.forEach((child) =>
+        child.map((children) => groupArray.push(children))
+      );
+    }
+  }
+  return groupArray;
+}
+
+export function searchDownBranch(entityResults, childrenGroups) {
+  const entityArray = entityResults.filter((entity) => {
+    return entity.companyGroups.find(({ id }) =>
+      childrenGroups.find((groupId) => groupId === id)
+    );
+  });
+  return entityArray;
+}
 const DeletionList = (props) => {
   const [users, setUser] = useState([]);
   const api = useApi();
   const groups = useGroups();
   const [groupToDelete, setGroupToDelete] = useDeletedGroups();
-
+  const childrenGroups = recursivelyFindChildren(groups, { id: groupToDelete });
   useEffect(() => {
     console.log(groupToDelete);
     async function disassociateUsers() {
       try {
-        let userArray = await api.call("Get", {
+        const userResults = await api.call("Get", {
           typeName: "User",
         });
-        userArray = userArray.filter((user) => {
-          return user.companyGroups.find(({ id }) => id === groupToDelete);
-        });
-        userArray.push(
-          ...userArray.filter((user) => {
-            return user.companyGroups.find(
-              ({ id }) =>
-                id === recursivelyFindChildren(groups, { id: groupToDelete }, user, userArray)
-            );
-          })
-        );
+        //make into functional component
+        const userArray = searchDownBranch(userResults, childrenGroups);
+        //fix this up to top comment
         setUser(userArray);
       } catch (err) {
         console.log(err);
@@ -36,18 +57,6 @@ const DeletionList = (props) => {
     }
     disassociateUsers();
   }, [groupToDelete]);
-
-  function recursivelyFindChildren(groups, child, entity, entityArray) {
-    const { id } = child;
-    const currentChild = groups.find((group) => group.id === id);
-    if (currentChild) {
-      const moveEntity = entity;
-      const moveList = entityArray
-      currentChild.children.map((nextChild) => {
-        return recursivelyFindChildren(groups, nextChild);
-      });
-    }
-  }
 
   function updatePrompt() {
     if (users.length === 0) {
@@ -115,7 +124,6 @@ const DeletionList = (props) => {
                     newGroup,
                     user
                   );
-                  console.log(dissassociate);
                   setUser((u) => {
                     return u.filter((nuser) => {
                       if (nuser.id === dissassociate) {
@@ -125,18 +133,21 @@ const DeletionList = (props) => {
                     });
                   });
                 }
-                console.log("This is new array: ");
               }}
             >
-              {groups.map((group) => {
-                return (
-                  <option
-                    key={group.id}
-                    value={group.id}
-                    label={group.name}
-                  ></option>
-                );
-              })}
+              {groups.reduce((acc, group) => {
+                // Group ID does not exist as child of current selection
+                if (childrenGroups.indexOf(group.id) === -1) {
+                   acc.push(
+                    <option
+                      key={group.id}
+                      value={group.id}
+                      label={group.name}
+                    ></option>
+                  );
+                }
+                return acc;
+              }, [])}
             </select>
           </div>
         );
