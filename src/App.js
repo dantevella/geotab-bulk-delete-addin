@@ -41,7 +41,6 @@ function App() {
     }
   }, [api, deleteGroupId]);
 
-
   if (!api) return null;
   return (
     <ApiProvider api={api} setApi={setApi}>
@@ -54,7 +53,7 @@ function App() {
             >
               <div className="App">
                 <div className="container">
-                  <h1>My Data</h1>
+                  <h1>MyGeotab Bulk Delete</h1>
                 </div>
 
                 <div className="repo-container">

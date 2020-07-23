@@ -13,7 +13,7 @@ async function disassociateUsers(api, groupId) {
         user.companyGroups = user.companyGroups.filter((companyGroup) => {
           return companyGroup === groupId[0];
         });
-        console.log(user)
+        console.log(user);
         return api.call("Set", {
           typeName: "User",
           entity: user,

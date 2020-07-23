@@ -19,7 +19,7 @@ function recursiveGetChildren(
   if (currentChild) {
     elements.push(
       <React.Fragment key={currentChild.id}>
-        <div style={{ paddingLeft: 10 * level, color: "white", fontSize: 22 }}>
+        <div style={{ paddingLeft: 20 * level, color: "white", fontSize: 22 }}>
           {currentChild.name}
         </div>
         <button
