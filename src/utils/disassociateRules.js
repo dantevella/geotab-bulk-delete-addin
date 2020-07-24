@@ -1,27 +1,13 @@
 // Sample API invocation retrieves all "Rule" objects
-async function disassociateRules(api, groupId) {
+async function disassociateRules(api, groupId, rule) {
   try {
-    let ruleArray = await api.call("Get", {
+    console.log(rule);
+    rule.groups = [{ id: groupId }];
+    await api.call("Set", {
       typeName: "Rule",
+      entity: rule,
     });
-    ruleArray = ruleArray.filter((rule) => {
-      return rule.groups.find(({ id }) => id === groupId[0]);
-    });
-    console.log(ruleArray);
-    await Promise.all(
-      ruleArray.map(async (rule) => {
-        rule.groups = rule.groups.filter((ngroup) => {
-          return ngroup === groupId[0];
-        });
-        console.log(rule);
-        return api.call("Set", {
-          typeName: "Rule",
-          entity: rule,
-        });
-      })
-    );
-    console.log("Done Breaking associations");
-    // break
+    return rule.id;
   } catch (err) {
     console.log(err);
   }

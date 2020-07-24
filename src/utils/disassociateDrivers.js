@@ -1,27 +1,13 @@
 // Sample API invocation retrieves all "Driver" objects
-async function disassociateDrivers(api, groupId) {
+async function disassociateDrivers(api, groupId, driver) {
   try {
-    let driverArray = await api.call("Get", {
+    console.log(driver);
+    driver.groups = [{ id: groupId }];
+    await api.call("Set", {
       typeName: "Driver",
+      entity: driver,
     });
-    driverArray = driverArray.filter((driver) => {
-      return driver.groups.find(({ id }) => id === groupId[0]);
-    });
-    console.log(driverArray);
-    await Promise.all(
-      driverArray.map(async (driver) => {
-        driver.groups = driver.groups.filter((ngroup) => {
-          return ngroup === groupId[0];
-        });
-        console.log(driver);
-        return api.call("Set", {
-          typeName: "Driver",
-          entity: driver,
-        });
-      })
-    );
-    console.log("Done Breaking associations");
-    // break
+    return driver.id;
   } catch (err) {
     console.log(err);
   }

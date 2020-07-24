@@ -41,7 +41,7 @@ export function searchDownBranch(
 const DeletionList = (props) => {
   return (
     <>
-      <DeletionUsers /> <DeletionZones /> <DeletionDevices />{" "}
+      <DeletionUsers /> <DeletionZones /> <DeletionDevices />
       <DeletionDrivers /> <DeletionRules />
     </>
   );

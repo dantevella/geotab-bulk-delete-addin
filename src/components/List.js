@@ -22,7 +22,7 @@ function recursiveGetChildren(
         <div style={{ paddingLeft: 20 * level, color: "white", fontSize: 22 }}>
           {currentChild.name}
         </div>
-        <button
+        <button style={{marginLeft: 20 * level}}
           type="button"
           onClick={() => {
             setGroupToDelete(currentChild.id);

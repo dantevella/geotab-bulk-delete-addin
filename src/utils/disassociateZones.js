@@ -1,27 +1,13 @@
 // Sample API invocation retrieves all "Device" objects
-async function disassociateZones(api, groupId) {
+async function disassociateZones(api, groupId, zone) {
   try {
-    let zoneArray = await api.call("Get", {
+    console.log(zone);
+    zone.groups = [{ id: groupId }];
+    await api.call("Set", {
       typeName: "Zone",
+      entity: zone,
     });
-    zoneArray = zoneArray.filter((zone) => {
-      return zone.groups.find(({ id }) => id === groupId[0]);
-    });
-    console.log(zoneArray);
-    await Promise.all(
-      zoneArray.map(async (zone) => {
-        zone.groups = zone.groups.filter((ngroup) => {
-          return ngroup === groupId[0];
-        });
-        console.log(zone);
-        return api.call("Set", {
-          typeName: "Zone",
-          entity: zone,
-        });
-      })
-    );
-    console.log("Done Breaking associations");
-    // break
+    return zone.id;
   } catch (err) {
     console.log(err);
   }

@@ -1,27 +1,12 @@
-// Sample API invocation retrieves all "Device" objects
-async function disassociateUsers(api, groupId) {
+async function disassociateUsers(api, groupId, user) {
   try {
-    let userArray = await api.call("Get", {
+    console.log(user);
+    user.companyGroups = [{ id: groupId }];
+    await api.call("Set", {
       typeName: "User",
+      entity: user,
     });
-    userArray = userArray.filter((user) => {
-      return user.companyGroups.find(({ id }) => id === groupId[0]);
-    });
-    console.log(userArray);
-    await Promise.all(
-      userArray.map(async (user) => {
-        user.companyGroups = user.companyGroups.filter((companyGroup) => {
-          return companyGroup === groupId[0];
-        });
-        console.log(user);
-        return api.call("Set", {
-          typeName: "User",
-          entity: user,
-        });
-      })
-    );
-    console.log("Done Breaking associations");
-    // break
+    return user.id;
   } catch (err) {
     console.log(err);
   }
