@@ -41,13 +41,9 @@ const DeletionDrivers = (props) => {
       {drivers.map((driver) => {
         return (
           <div key={driver.id}>
-            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18 }}>
-              <div>
-                Driver: <strong>{driver.name}</strong> was in{" "}
-                <strong>{groupDeleting && groupDeleting.name}</strong> and will
-                be moved to:
-              </div>
-            </div>
+            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18, display: "block", textAlign: "center"}}>
+                Driver: <strong>{driver.name}</strong> in{" "}
+                <strong>{groupDeleting && groupDeleting.name}</strong> <br></br>move to group: &ensp;
             <select
               style={{
                 paddingLeft: 10,
@@ -91,6 +87,7 @@ const DeletionDrivers = (props) => {
                 return acc;
               }, [])}
             </select>
+            </div>
           </div>
         );
       })}

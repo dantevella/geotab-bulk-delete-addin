@@ -41,13 +41,9 @@ const DeletionRules = (props) => {
       {rules.map((rule) => {
         return (
           <div key={rule.id}>
-            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18 }}>
-              <div>
-                Rule: <strong>{rule.name}</strong> was in{" "}
-                <strong>{groupDeleting && groupDeleting.name}</strong> and will
-                be moved to:
-              </div>
-            </div>
+                        <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18, display: "block", textAlign: "center"}}>
+                Rule: <strong>{rule.name}</strong> in{" "}
+                <strong>{groupDeleting && groupDeleting.name}</strong> <br></br>move to group: &ensp;
             <select
               style={{
                 paddingLeft: 10,
@@ -91,6 +87,7 @@ const DeletionRules = (props) => {
                 return acc;
               }, [])}
             </select>
+            </div>
           </div>
         );
       })}

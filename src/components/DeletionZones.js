@@ -41,13 +41,9 @@ const DeletionZones = (props) => {
       {zones.map((zone) => {
         return (
           <div key={zone.id}>
-            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18 }}>
-              <div>
-                Zone: <strong>{zone.name}</strong> was in{" "}
-                <strong>{groupDeleting && groupDeleting.name}</strong> and will
-                be moved to:
-              </div>
-            </div>
+                        <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18, display: "block", textAlign: "center"}}>
+                Zone: <strong>{zone.name}</strong> in{" "}
+                <strong>{groupDeleting && groupDeleting.name}</strong> <br></br>move to group: &ensp;
             <select
               style={{
                 paddingLeft: 10,
@@ -91,6 +87,7 @@ const DeletionZones = (props) => {
                 return acc;
               }, [])}
             </select>
+            </div>
           </div>
         );
       })}

@@ -69,22 +69,17 @@ const DeletionUsers = (props) => {
   return (
     <div>
       <h3 className="list-head">
-        This group has entity dependencies, please select either an existing
-        group or create a group from the website called "Null Group" to move the
-        following entities' associations into.
+        This group is assosciated with entities within the database.
+        Please move these entities into a different group.
       </h3>
       <h3 className="list-head">Users Found In Group</h3>
       {updatePrompt()}
       {users.map((user) => {
         return (
           <div key={user.id}>
-            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18 }}>
-              <div>
-                User: <strong>{user.name}</strong> was in{" "}
-                <strong>{groupDeleting && groupDeleting.name}</strong> and will
-                be moved to:
-              </div>
-            </div>
+            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18, display: "block", textAlign: "center"}}>
+                User: <strong>{user.name}</strong> in{" "}
+                <strong>{groupDeleting && groupDeleting.name}</strong> <br></br>move to group: &ensp;
             <select
               style={{
                 paddingLeft: 10,
@@ -128,6 +123,7 @@ const DeletionUsers = (props) => {
                 return acc;
               }, [])}
             </select>
+            </div>
           </div>
         );
       })}
