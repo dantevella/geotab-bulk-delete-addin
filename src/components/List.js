@@ -19,10 +19,9 @@ function recursiveGetChildren(
   if (currentChild) {
     elements.push(
       <React.Fragment key={currentChild.id}>
-        <div style={{ paddingLeft: 20 * level, color: "white", fontSize: 22 }}>
+        <div style={{ paddingLeft: 20 * level, color: "#1070a9", fontSize: 16, fontWeight: 600 }}>
           {currentChild.name}
-        </div>
-        <button style={{marginLeft: 20 * level}}
+        <button style={{marginLeft: 10}}
           type="button"
           onClick={() => {
             setGroupToDelete(currentChild.id);
@@ -30,7 +29,7 @@ function recursiveGetChildren(
           className="delete-buttons"
         >
           Delete
-        </button>
+        </button></div>
       </React.Fragment>
     );
     currentChild.children.map((nextChild) => {

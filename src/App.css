@@ -60,10 +60,10 @@
 .delete-buttons {
   border: solid;
   border-color: #C0C0C0;
+  border-radius: 20px;
   color: #fff;
-  padding: 15px 32px;
+  padding: 0px 5px;
   text-align: center;
-  display: block;
   position: 'center';
   font-size: 16px;
   font-weight: 600;
