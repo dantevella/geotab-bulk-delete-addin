@@ -41,7 +41,7 @@ const DeletionRules = (props) => {
       {rules.map((rule) => {
         return (
           <div key={rule.id}>
-            <div style={{ paddingLeft: 10, color: "#008", fontSize: 18 }}>
+            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18 }}>
               <div>
                 Rule: <strong>{rule.name}</strong> was in{" "}
                 <strong>{groupDeleting && groupDeleting.name}</strong> and will
@@ -53,7 +53,7 @@ const DeletionRules = (props) => {
                 paddingLeft: 10,
                 color: "white",
                 fontSize: 18,
-                backgroundColor: "#008",
+                backgroundColor: "#1070a9",
               }}
               name="groups"
               id="groups"

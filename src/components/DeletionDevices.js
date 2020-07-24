@@ -41,7 +41,7 @@ const DeletionDevices = (props) => {
       {devices.map((device) => {
         return (
           <div key={device.id}>
-            <div style={{ paddingLeft: 10, color: "#008", fontSize: 18 }}>
+            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18 }}>
               <div>
                 Device: <strong>{device.name}</strong> was in{" "}
                 <strong>{groupDeleting && groupDeleting.name}</strong> and will
@@ -53,7 +53,7 @@ const DeletionDevices = (props) => {
                 paddingLeft: 10,
                 color: "white",
                 fontSize: 18,
-                backgroundColor: "#008",
+                backgroundColor: "#1070a9",
               }}
               name="groups"
               id="groups"
