@@ -20,7 +20,7 @@ const DeletionDrivers = (props) => {
         });
         //make into functional component
         console.log(driverResults);
-        const driverArray = searchDownBranch(driverResults, childrenGroups);
+        const driverArray = searchDownBranch(driverResults, childrenGroups, "companyGroups");
         //fix this up to top comment
         setDriver(driverArray);
       } catch (err) {
