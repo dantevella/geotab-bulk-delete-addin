@@ -2,7 +2,6 @@ import React from "react";
 import DeletionUsers from "./DeletionUsers";
 import DeletionZones from "./DeletionZones";
 import DeletionDevices from "./DeletionDevices";
-import DeletionDrivers from "./DeletionDrivers";
 import DeletionRules from "./DeletionRules";
 
 export function recursivelyFindChildren(groups, child) {
@@ -41,8 +40,10 @@ export function searchDownBranch(
 const DeletionList = (props) => {
   return (
     <>
-      <DeletionUsers /> <DeletionZones /> <DeletionDevices />
-      <DeletionDrivers /> <DeletionRules />
+      <DeletionUsers /> 
+      <DeletionZones /> 
+      <DeletionDevices /> 
+      <DeletionRules />
     </>
   );
 };

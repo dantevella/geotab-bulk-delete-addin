@@ -1,7 +1,7 @@
 async function disassociateUsers(api, groupId, user) {
   try {
-    console.log(user);
     user.companyGroups = [{ id: groupId }];
+    if (user.driverGroups) user.driverGroups = user.companyGroups
     await api.call("Set", {
       typeName: "User",
       entity: user,
