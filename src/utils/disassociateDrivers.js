@@ -2,7 +2,7 @@
 async function disassociateDrivers(api, groupId, driver) {
   try {
     console.log(driver);
-    driver.groups = [{ id: groupId }];
+    driver.companyGroups = [{ id: groupId }];
     await api.call("Set", {
       typeName: "Driver",
       entity: driver,
