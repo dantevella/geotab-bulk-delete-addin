@@ -21,7 +21,7 @@ function recursiveGetChildren(
       <React.Fragment key={currentChild.id}>
         <div style={{ paddingLeft: 20 * level, color: "#1070a9", fontSize: 16, fontWeight: 600 }}>
           {currentChild.name}
-        <button style={{marginLeft: 10}}
+        <button 
           type="button"
           onClick={() => {
             setGroupToDelete(currentChild.id);

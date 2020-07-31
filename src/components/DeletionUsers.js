@@ -21,19 +21,20 @@ const DeletionUsers = (props) => {
           typeName: "User",
         });
         //make into functional component
-        
-        const {entityArray: userArray, entitiesToRemove}= searchDownBranch(
+
+        const { entityArray: userArray, entitiesToRemove } = searchDownBranch(
           userResults,
           childrenGroups,
           "companyGroups"
         );
-        await Promise.all(entitiesToRemove.map((entity)=>{
-          return api.call("Set",{
-            typeName: "User",
-            entity,
+        await Promise.all(
+          entitiesToRemove.map((entity) => {
+            return api.call("Set", {
+              typeName: "User",
+              entity,
+            });
           })
-        }))
-
+        );
 
         //fix this up to top comment
         setUser(userArray);
@@ -47,25 +48,25 @@ const DeletionUsers = (props) => {
   function updatePrompt() {
     if (users.length === 0) {
       return (
-        <React.Fragment>
-          <button
-            type="button"
-            onClick={async () => {
-              await removeMulticalls(api, [groupToDelete], groups);
-              setGroupToDelete(undefined);
-            }}
-            className="delete-buttons"
-          >
-            Delete
-          </button>
-          <button
-            type="button"
-            onClick={() => setGroupToDelete(undefined)}
-            className="delete-buttons"
-          >
-            Cancel
-          </button>
-        </React.Fragment>
+        <div style={{alignItems: "center", display: "flex"}}>
+            <button
+              type="button"
+              onClick={async () => {
+                await removeMulticalls(api, [groupToDelete], groups);
+                setGroupToDelete(undefined);
+              }}
+              className="delete-buttons"
+            >
+              Delete
+            </button>
+            <button
+              type="button"
+              onClick={() => setGroupToDelete(undefined)}
+              className="delete-buttons"
+            >
+              Cancel
+            </button>
+        </div>
       );
     }
   }
@@ -78,60 +79,69 @@ const DeletionUsers = (props) => {
   return (
     <div>
       <h3 className="list-head">
-        This group is assosciated with entities within the database.
-        Please move these entities into a different group.
+        This group is assosciated with entities within the database. Please move
+        these entities into a different group.
       </h3>
       <h3 className="list-head">Users Found In Group</h3>
       {updatePrompt()}
       {users.map((user) => {
         return (
           <div key={user.id}>
-            <div style={{ paddingLeft: 10, color: "#1070a9", fontSize: 18, display: "block", textAlign: "center"}}>
-                User: <strong>{user.name}</strong> in{" "}
-                <strong>{groupDeleting && groupDeleting.name}</strong> <br></br>move to group: &ensp;
-            <select
+            <div
               style={{
                 paddingLeft: 10,
-                color: "white",
+                color: "#1070a9",
                 fontSize: 18,
-                backgroundColor: "#1070a9",
-              }}
-              name="groups"
-              id="groups"
-              key={user.id}
-              onChange={async (e) => {
-                const newGroup = e.target.value;
-                if (newGroup) {
-                  const dissassociate = await disassociateUsers(
-                    api,
-                    newGroup,
-                    user
-                  );
-                  setUser((u) => {
-                    return u.filter((nuser) => {
-                      if (nuser.id === dissassociate) {
-                        return false;
-                      }
-                      return true;
-                    });
-                  });
-                }
+                display: "block",
+                textAlign: "center",
               }}
             >
-              {groups.reduce((acc, group) => {
-                // Group ID does not exist as child of current selection
-                if (childrenGroups.indexOf(group.id) === -1) {
-                  acc.push(
-                    <option
-                      key={group.id}
-                      value={group.id}
-                      label={group.name}
-                    ></option>
-                  );
-                }
-                return acc;
-              }, [])}
-            </select>
+              User: <strong>{user.name}</strong> in{" "}
+              <strong>{groupDeleting && groupDeleting.name}</strong> <br></br>
+              move to group: &ensp;
+              <select
+                style={{
+                  paddingLeft: 10,
+                  color: "white",
+                  fontSize: 18,
+                  backgroundColor: "#1070a9",
+                }}
+                name="groups"
+                id="groups"
+                key={user.id}
+                onChange={async (e) => {
+                  const newGroup = e.target.value;
+                  if (newGroup) {
+                    const dissassociate = await disassociateUsers(
+                      api,
+                      newGroup,
+                      user
+                    );
+                    setUser((u) => {
+                      return u.filter((nuser) => {
+                        if (nuser.id === dissassociate) {
+                          return false;
+                        }
+                        return true;
+                      });
+                    });
+                  }
+                }}
+              >
+                {groups.reduce((acc, group) => {
+                  // Group ID does not exist as child of current selection
+                  if (childrenGroups.indexOf(group.id) === -1) {
+                    acc.push(
+                      <option
+                        key={group.id}
+                        value={group.id}
+                        label={group.name}
+                      ></option>
+                    );
+                  }
+                  return acc;
+                }, [])}
+              </select>
             </div>
           </div>
         );

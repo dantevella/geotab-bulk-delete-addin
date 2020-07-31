@@ -79,9 +79,13 @@ export function searchDownBranch(
 }
 
 const DeletionList = (props) => {
+  // States users, zones, devices, rules
+  // data fetching
   return (
     <>
-      <DeletionUsers />
+    {/* Prompt */}
+    {/* Buttons */}
+      <DeletionUsers /* pass users/setUsers */ />
       <DeletionZones />
       <DeletionDevices />
       <DeletionRules />
