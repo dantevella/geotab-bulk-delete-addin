@@ -20,7 +20,16 @@ const DeletionRules = (props) => {
         });
         //make into functional component
         console.log(ruleResults);
-        const ruleArray = searchDownBranch(ruleResults, childrenGroups);
+        const {entityArray: ruleArray, entitiesToRemove}= searchDownBranch(
+          ruleResults,
+          childrenGroups,
+        );
+        await Promise.all(entitiesToRemove.map((entity)=>{
+          return api.call("Set",{
+            typeName: "Rule",
+            entity,
+          })
+        }))
         //fix this up to top comment
         setRule(ruleArray);
       } catch (err) {

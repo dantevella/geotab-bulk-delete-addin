@@ -29,20 +29,61 @@ export function searchDownBranch(
   childrenGroups,
   searchAttribute = "groups"
 ) {
-  const entityArray = entityResults.filter((entity) => {
-    return entity[searchAttribute].find(({ id }) =>
-      childrenGroups.find((groupId) => groupId === id)
-    );
-  });
-  return entityArray;
+  const foundEntities = entityResults.reduce(
+    (accValue, entity) => {
+      let containsAssociatedEntity = false;
+      let containsOutsideEntity = false;
+
+      let groupIds = entity[searchAttribute].map(({ id }) => id);
+
+      groupIds.forEach((groupId) => {
+        if (childrenGroups.indexOf(groupId) === -1) {
+          containsOutsideEntity = true;
+        }
+
+        if (childrenGroups.indexOf(groupId) > -1) {
+          containsAssociatedEntity = true;
+        }
+      });
+
+      if (containsOutsideEntity && containsAssociatedEntity) {
+        accValue.entitiesToRemove.push(entity);
+      } else if (containsAssociatedEntity) {
+        accValue.entityArray.push(entity);
+      }
+
+      return accValue;
+    },
+    { entityArray: [], entitiesToRemove: [] }
+  );
+
+  const { entityArray, entitiesToRemove } = foundEntities;
+
+  console.log("entities to remove: ", { entitiesToRemove });
+  // Entities to remove should be broken... here or somewhere else
+  if ( entitiesToRemove.length>0 ) {
+      const newUsers = entitiesToRemove.map(entity=>{
+        entity[searchAttribute] = entity[searchAttribute].filter(({id}) => (
+          childrenGroups.indexOf(id) === -1
+        ));
+        if (entity.driverGroups) {
+          entity.driverGroups = entity.driverGroups.filter(({id}) => (
+            childrenGroups.indexOf(id) === -1
+          ));
+        }
+        return entity
+      });
+      console.log({newUsers})
+  }
+  return {entityArray, entitiesToRemove}
 }
 
 const DeletionList = (props) => {
   return (
     <>
-      <DeletionUsers /> 
-      <DeletionZones /> 
-      <DeletionDevices /> 
+      <DeletionUsers />
+      <DeletionZones />
+      <DeletionDevices />
       <DeletionRules />
     </>
   );

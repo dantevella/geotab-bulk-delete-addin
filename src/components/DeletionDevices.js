@@ -20,7 +20,16 @@ const DeletionDevices = (props) => {
         });
         //make into functional component
         console.log(deviceResults);
-        const deviceArray = searchDownBranch(deviceResults, childrenGroups);
+        const {entityArray: deviceArray, entitiesToRemove}= searchDownBranch(
+          deviceResults,
+          childrenGroups,
+        );
+        await Promise.all(entitiesToRemove.map((entity)=>{
+          return api.call("Set",{
+            typeName: "Device",
+            entity,
+          })
+        }))
         //fix this up to top comment
         setDevice(deviceArray);
       } catch (err) {

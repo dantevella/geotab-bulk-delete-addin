@@ -20,7 +20,16 @@ const DeletionZones = (props) => {
         });
         //make into functional component
         console.log(zoneResults);
-        const zoneArray = searchDownBranch(zoneResults, childrenGroups);
+        const {entityArray: zoneArray, entitiesToRemove}= searchDownBranch(
+          zoneResults,
+          childrenGroups,
+        );
+        await Promise.all(entitiesToRemove.map((entity)=>{
+          return api.call("Set",{
+            typeName: "Zone",
+            entity,
+          })
+        }))
         //fix this up to top comment
         setZone(zoneArray);
       } catch (err) {

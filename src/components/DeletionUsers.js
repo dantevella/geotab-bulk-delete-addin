@@ -21,11 +21,20 @@ const DeletionUsers = (props) => {
           typeName: "User",
         });
         //make into functional component
-        const userArray = searchDownBranch(
+        
+        const {entityArray: userArray, entitiesToRemove}= searchDownBranch(
           userResults,
           childrenGroups,
           "companyGroups"
         );
+        await Promise.all(entitiesToRemove.map((entity)=>{
+          return api.call("Set",{
+            typeName: "User",
+            entity,
+          })
+        }))
+
+
         //fix this up to top comment
         setUser(userArray);
       } catch (err) {

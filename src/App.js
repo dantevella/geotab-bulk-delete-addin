@@ -41,7 +41,18 @@ function App() {
     }
   }, [api, deleteGroupId]);
 
-  if (!api) return null;
+  if (!api)
+    return (
+      <div className="App">
+        <div className="container">
+          <h1>MyGeotab Bulk Delete</h1>
+        </div>
+        <div className="repo-container">
+          The Geotab API is not operating correctly, please contact your system
+          administrator for further instructions.
+        </div>
+      </div>
+    );
   return (
     <ApiProvider api={api} setApi={setApi}>
       <GroupsProvider groups={appState.groups}>
