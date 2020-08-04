@@ -1,89 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useApi } from "./ApiProvider";
-import { useGroups, GroupsProvider } from "./GroupsProvider";
+import { useGroups } from "./GroupsProvider";
 import { useDeletedGroups } from "./DeletedGroupsProvider";
 import disassociateUsers from "../utils/disassociateUsers";
-import removeMulticalls from "../utils/removeMulticalls";
 import { recursivelyFindChildren } from "./DeletionList";
-import { searchDownBranch } from "./DeletionList";
 
 const DeletionUsers = (props) => {
-  const [users, setUser] = useState([]);
+  const { users, setUsers } = props;
   const api = useApi();
   const groups = useGroups();
-  const [groupToDelete, setGroupToDelete] = useDeletedGroups();
+  const [groupToDelete] = useDeletedGroups();
+
+  if (users.length === 0) return null;
+
   const childrenGroups = recursivelyFindChildren(groups, { id: groupToDelete });
-  useEffect(() => {
-    console.log(groupToDelete);
-    async function disassociateUsers() {
-      try {
-        const userResults = await api.call("Get", {
-          typeName: "User",
-        });
-        //make into functional component
-
-        const { entityArray: userArray, entitiesToRemove } = searchDownBranch(
-          userResults,
-          childrenGroups,
-          "companyGroups"
-        );
-        await Promise.all(
-          entitiesToRemove.map((entity) => {
-            return api.call("Set", {
-              typeName: "User",
-              entity,
-            });
-          })
-        );
-
-        //fix this up to top comment
-        setUser(userArray);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    disassociateUsers();
-  }, [groupToDelete]);
-
-  function updatePrompt() {
-    if (users.length === 0) {
-      return (
-        <div style={{alignItems: "center", display: "flex"}}>
-            <button
-              type="button"
-              onClick={async () => {
-                await removeMulticalls(api, [groupToDelete], groups);
-                setGroupToDelete(undefined);
-              }}
-              className="delete-buttons"
-            >
-              Delete
-            </button>
-            <button
-              type="button"
-              onClick={() => setGroupToDelete(undefined)}
-              className="delete-buttons"
-            >
-              Cancel
-            </button>
-        </div>
-      );
-    }
-  }
-
-  // grab group id from context
-  //get users for groups
-  // set the users into state
-
   const groupDeleting = groups.find((group) => group.id === groupToDelete);
   return (
     <div>
-      <h3 className="list-head">
-        This group is assosciated with entities within the database. Please move
-        these entities into a different group.
-      </h3>
       <h3 className="list-head">Users Found In Group</h3>
-      {updatePrompt()}
       {users.map((user) => {
         return (
           <div key={user.id}>
@@ -117,7 +51,7 @@ const DeletionUsers = (props) => {
                       newGroup,
                       user
                     );
-                    setUser((u) => {
+                    setUsers((u) => {
                       return u.filter((nuser) => {
                         if (nuser.id === dissassociate) {
                           return false;
