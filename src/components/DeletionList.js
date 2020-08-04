@@ -169,7 +169,7 @@ const DeletionList = (props) => {
             order to delete the group, or you can click on cancel to cancel the
             request to delete this group.
           </h3>
-          <div style={{ alignItems: "center", display: "flex" }}>
+          <div style={{ alignSelf: "center", display: "flex" }}>
             <button
               type="button"
               onClick={async () => {
