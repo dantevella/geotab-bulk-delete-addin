@@ -182,7 +182,7 @@ const DeletionList = (props) => {
                       The system is unsure how to remove the following relationships:
                       ${JSON.stringify(
                         Object.keys(err.data)
-                          .filter((dataType) => err.data[dataType].length !== 0 || dataType !== 'group')
+                          .filter((dataType) => err.data[dataType].length !== 0 && dataType !== 'group')
                           .map((dataType) => ({
                             [dataType]: err.data[dataType],
                           }))
