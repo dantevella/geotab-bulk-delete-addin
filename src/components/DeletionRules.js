@@ -71,9 +71,13 @@ const DeletionRules = (props) => {
                       ${err.message}
 
                       The system is unsure how to remove the following relationships:
-                      ${JSON.stringify(Object.keys(err.data).filter(dataType => {
-                        err.data[dataType].length !== 0
-                      }).map(dataType => err.data[dataType]))}
+                      ${JSON.stringify(
+                        Object.keys(err.data)
+                          .filter((dataType) => err.data[dataType].length !== 0)
+                          .map((dataType) => ({
+                            [dataType]: err.data[dataType],
+                          }))
+                      )}
                       `);
                     }
                   }
