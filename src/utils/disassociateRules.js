@@ -8,7 +8,7 @@ async function disassociateRules(api, groupId, rule) {
     });
     return rule.id;
   } catch (err) {
-    throw Error(err)
+    console.log(err);
   }
 }
 export default disassociateRules;

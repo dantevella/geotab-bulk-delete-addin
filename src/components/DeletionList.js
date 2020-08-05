@@ -120,6 +120,7 @@ const initialDataFetch = async (
 const DeletionList = (props) => {
   // States users, zones, devices, rules
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
   const [devices, setDevices] = useState([]);
   const [zones, setZones] = useState([]);
   const [users, setUsers] = useState([]);
@@ -174,8 +175,24 @@ const DeletionList = (props) => {
             <button
               type="button"
               onClick={async () => {
-                await removeMulticalls(api, [groupToDelete], groups);
-                setGroupToDelete(undefined);
+                try {
+                  await removeMulticalls(api, [groupToDelete], groups);
+                  setGroupToDelete(undefined);
+                } catch (err) {
+                  setError(`
+                      Error occurred preventing deletion: ${err.name}
+                      ${err.message}
+
+                      The system is unsure how to remove the following relationships:
+                      ${JSON.stringify(
+                        Object.keys(err.data)
+                          .filter((dataType) => err.data[dataType].length !== 0)
+                          .map((dataType) => ({
+                            [dataType]: err.data[dataType],
+                          }))
+                      )}
+                      `);
+                }
               }}
               className="delete-buttons"
             >
@@ -189,6 +206,7 @@ const DeletionList = (props) => {
               Cancel
             </button>
           </div>
+          {error && <div>{error}</div>}
         </>
       )}
       {/* Pass values & setters as props to each list */}
