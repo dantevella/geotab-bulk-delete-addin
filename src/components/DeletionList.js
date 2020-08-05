@@ -98,13 +98,11 @@ const initialDataFetch = async (
     const results = await api.call("Get", {
       typeName,
     });
-    console.log({ [typeName]: results });
     const { entityArray, entitiesToRemove } = searchDownBranch(
       results,
       childrenGroups,
       getter
     );
-    console.log({ [typeName]: { entityArray, entitiesToRemove } });
     await Promise.all(
       entitiesToRemove.map((entity) => {
         return api.call("Set", { typeName, entity });
@@ -128,7 +126,6 @@ const DeletionList = (props) => {
   const [groupToDelete, setGroupToDelete] = useDeletedGroups();
   const groups = useGroups();
   const api = useApi();
-  console.log({ groupToDelete });
   // data fetching
   const childrenGroups = recursivelyFindChildren(groups, { id: groupToDelete });
   React.useEffect(() => {
@@ -147,7 +144,6 @@ const DeletionList = (props) => {
     }
     fetchAllData();
   }, [groupToDelete]);
-  console.log(rules);
 
   const canDelete =
     loading === false &&
@@ -186,7 +182,7 @@ const DeletionList = (props) => {
                       The system is unsure how to remove the following relationships:
                       ${JSON.stringify(
                         Object.keys(err.data)
-                          .filter((dataType) => err.data[dataType].length !== 0)
+                          .filter((dataType) => err.data[dataType].length !== 0 || dataType !== 'group')
                           .map((dataType) => ({
                             [dataType]: err.data[dataType],
                           }))
