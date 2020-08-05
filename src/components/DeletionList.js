@@ -132,6 +132,7 @@ const DeletionList = (props) => {
     async function fetchAllData() {
       await initialDataFetch(api, childrenGroups, "Device", setDevices);
       await initialDataFetch(api, childrenGroups, "Zone", setZones);
+      await initialDataFetch(api, childrenGroups, "Rule", setRules);
       await initialDataFetch(
         api,
         childrenGroups,
@@ -139,11 +140,11 @@ const DeletionList = (props) => {
         setUsers,
         "companyGroups"
       );
-      await initialDataFetch(api, childrenGroups, "Rule", setRules);
       setLoading(false);
     }
     fetchAllData();
   }, [groupToDelete]);
+  console.log(rules);
 
   const canDelete =
     loading === false &&
@@ -154,14 +155,12 @@ const DeletionList = (props) => {
 
   return (
     <>
-      {/* Prompt */}
       {!canDelete && (
         <h3 className="list-head">
           This group is assosciated with entities within the database. Please
           move these entities into a different group.
         </h3>
       )}
-      {/* Buttons */}
       {canDelete && (
         <>
           <h3 className="list-head">
