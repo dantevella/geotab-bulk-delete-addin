@@ -1,7 +1,6 @@
 // Sample API invocation retrieves all "Rule" objects
 async function disassociateRules(api, groupId, rule) {
   try {
-    console.log(rule);
     rule.groups = [{ id: groupId }];
     await api.call("Set", {
       typeName: "Rule",
@@ -9,7 +8,7 @@ async function disassociateRules(api, groupId, rule) {
     });
     return rule.id;
   } catch (err) {
-    console.log(err);
+    throw Error(err)
   }
 }
 export default disassociateRules;
