@@ -64,7 +64,6 @@ export function searchDownBranch(
 
   const { entityArray, entitiesToRemove } = foundEntities;
 
-  console.log("entities to remove: ", { entitiesToRemove });
   // Entities to remove should be broken... here or somewhere else
   if (entitiesToRemove.length > 0) {
     const newUsers = entitiesToRemove.map((entity) => {
@@ -128,6 +127,7 @@ const DeletionList = (props) => {
   const [groupToDelete, setGroupToDelete] = useDeletedGroups();
   const groups = useGroups();
   const api = useApi();
+  console.log({ groupToDelete });
   // data fetching
   const childrenGroups = recursivelyFindChildren(groups, { id: groupToDelete });
   React.useEffect(() => {
