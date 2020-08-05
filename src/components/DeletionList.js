@@ -99,11 +99,13 @@ const initialDataFetch = async (
     const results = await api.call("Get", {
       typeName,
     });
+    console.log({ [typeName]: results });
     const { entityArray, entitiesToRemove } = searchDownBranch(
       results,
       childrenGroups,
       getter
     );
+    console.log({ [typeName]: { entityArray, entitiesToRemove } });
     await Promise.all(
       entitiesToRemove.map((entity) => {
         return api.call("Set", { typeName, entity });
