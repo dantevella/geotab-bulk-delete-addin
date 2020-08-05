@@ -7,9 +7,14 @@ import { recursivelyFindChildren } from "./DeletionList";
 
 const DeletionRules = (props) => {
   const { rules, setRules } = props;
+  const [error, setError] = React.useState();
   const api = useApi();
   const groups = useGroups();
   const [groupToDelete] = useDeletedGroups();
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   if (rules.length === 0) return null;
 
@@ -46,19 +51,31 @@ const DeletionRules = (props) => {
                 onChange={async (e) => {
                   const newGroup = e.target.value;
                   if (newGroup) {
-                    const dissassociate = await disassociateRules(
-                      api,
-                      newGroup,
-                      rule
-                    );
-                    setRules((u) => {
-                      return u.filter((nrule) => {
-                        if (nrule.id === dissassociate) {
-                          return false;
-                        }
-                        return true;
+                    try {
+                      const dissassociate = await disassociateRules(
+                        api,
+                        newGroup,
+                        rule
+                      );
+                      setRules((u) => {
+                        return u.filter((nrule) => {
+                          if (nrule.id === dissassociate) {
+                            return false;
+                          }
+                          return true;
+                        });
                       });
-                    });
+                    } catch (err) {
+                      setError(`
+                      Error occurred preventing deletion: ${err.name}
+                      ${err.message}
+
+                      The system is unsure how to remove the following relationships:
+                      ${JSON.stringify(Object.keys(err.data).filter(dataType => {
+                        err.data[dataType].length !== 0
+                      }).map(dataType => err.data[dataType]))}
+                      `);
+                    }
                   }
                 }}
               >
