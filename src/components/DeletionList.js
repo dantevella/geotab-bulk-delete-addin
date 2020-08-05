@@ -176,10 +176,10 @@ const DeletionList = (props) => {
                   setGroupToDelete(undefined);
                 } catch (err) {
                   setError(`
-                      Error occurred preventing deletion: ${err.name}
-                      ${err.message}
+                      Error occurred preventing deletion: ${err.name}\n
+                      ${err.message}\n
 
-                      The system is unsure how to remove the following relationships:
+                      The system is unsure how to remove the following relationships:\n
                       ${JSON.stringify(
                         Object.keys(err.data)
                           .filter((dataType) => err.data[dataType].length !== 0 && dataType !== 'group')
